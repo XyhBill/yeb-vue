@@ -5,6 +5,7 @@ import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import { postRequest, putRequest, getRequest, deleteRequest } from "./utils/api";
+import { initMenu } from './utils/menus'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
@@ -13,6 +14,17 @@ Vue.prototype.postRequest = postRequest
 Vue.prototype.putRequest = putRequest
 Vue.prototype.getRequest = getRequest
 Vue.prototype.deleteRequest = deleteRequest
+
+router.beforeEach((to, from, next) => {
+  console.log(to)
+  console.log(from)
+//   if (window.sessionStorage.getItem('tokenStr')) {
+    initMenu(router,store);
+    next();
+//   } else {
+//     next()
+//   }
+});
 
 new Vue({
   router,

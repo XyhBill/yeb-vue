@@ -5,7 +5,7 @@
       <el-container>
         <el-aside width="200px">
           <el-menu router>
-            <el-submenu index="1" v-for="(item,index) in this.$router.options.routes" :ket="index" v-if="!item.hidden">
+            <el-submenu index="1" v-for="(item,index) in routes" :ket="index" v-if="!item.hidden">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>{{item.name}}</span>
@@ -27,7 +27,12 @@
     name: 'Home',
     methods: {
      
-    }
+    },
+    computed: {
+      routes() {
+        return this.$store.state.routes 
+      }
+    },
   }
 </script>
 
