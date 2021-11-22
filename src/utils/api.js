@@ -1,26 +1,23 @@
 import axios from 'axios'
 import { Message } from "element-ui"
-import router from "../router";
 
 axios.interceptors.request.use(config =>{
   if (window.sessionStorage.getItem('tokenStr')) {
+    console.log(config)
     config.headers['Authorization'] = window.sessionStoreage.getItem('tokenStr')
   }
+  return config
 } , error =>{
-  console.log("🚀 ~ file: api.js ~ line 8 ~ error", error)
+  return Promise.reject(error)
 })
 
 axios.interceptors.response.use(success => {
   // if (success.status && success.status == 200) {
     // if (success.status == 403 || success.status == 401 || success.status == 500) {
-      Message.error({messag: success.data.Message})
-      return;
+      Message.success({message: success.data.Message})
+      return success.data;
     // } 
-    if (success.data.message) {
-      Message.success({message: success.data.messag})
-    }
   // }
-  return success.data;
 }, error => {
   // if (error.response.code == 504 || error.response.code == 404) {
   //   Message.error({message: "无法连接服务器"})
@@ -36,10 +33,11 @@ axios.interceptors.response.use(success => {
   //     Message.error({message: "未知错误"})
   //   }
   // }
-  return 'error';
+  Message.error({message: "无法连接服务器"})
+  return error;
 })
 
-let base = ''
+let base = '/acc'
 
 export const postRequest= (url , params) => {
   return axios({
@@ -53,7 +51,7 @@ export const getRequest= (url,params) => {
   return axios({
     method: 'get',
     url: `${base}${url}`,
-    data: params
+    params
   })
 }
 

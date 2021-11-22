@@ -16,8 +16,6 @@ Vue.prototype.getRequest = getRequest
 Vue.prototype.deleteRequest = deleteRequest
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
-  console.log(from)
 //   if (window.sessionStorage.getItem('tokenStr')) {
     initMenu(router,store);
     next();

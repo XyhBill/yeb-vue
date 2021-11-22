@@ -18,18 +18,6 @@ const routes = [
     path: '/home',
     name: '首页',
     component: Home,
-    children: [
-      {
-        path: '/test1',
-        name: '选项1',
-        component: Test1
-      },
-      {
-        path: '/test2',
-        name: '选项2',
-        component: Test2
-      }
-    ]
   }
   
   

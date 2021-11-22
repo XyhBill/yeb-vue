@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item prop="code">
         <el-input type="text" v-model="loginForm.code" placeholder="点击图片更换验证码" style="width: 250px; margin-right:5px"></el-input>
-        <img :src="captchaUrl" @click="updateCaptcha">
+        <h3>{{loginForm.code}}</h3>
       </el-form-item>
       <el-checkbox v-model="ckecked" class="loginRemeber">记住我</el-checkbox>
       <el-button type="primary" style="width: 100%" @click="submitLogin">登录</el-button>
@@ -25,7 +25,8 @@
     data() {
       return {
         loading: false,
-        captchaUrl: '/captcha?time=' + new Date(),
+        // captchaUrl: '/captcha?time=' + new Date(),
+        captchaUrl: '/captcha',
         loginForm: {
           username: 'admin',
           password: '123',
@@ -40,27 +41,17 @@
       }
     },
     methods: {
-      updateCaptcha(){
-        this.captchaUrl = '/captcha?time=' + new Date();
-      },
       submitLogin(){
-        // this.$refs.loginForm.validate((valid) => {
-        //   if (valid) {
-        //     postRequest('/login',this.loginForm).then(resp => {
-        //       alert(resp)
-        //     })
-        //   } else {
-        //     this.$message.error('错了哦，这是一条错误消息');
-        //     return false;
-        //   }
-        // });
         // const tokenStr = resp.obj.tokenHead+resp.obj.token
         // window.sessionStorage.setItem('tokenStr',tokenStr)
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
             this.postRequest('/login',this.loginForm).then(resp => {
-              // alert(resp)
-              this.$router.replace('/home')
+              if (resp) {
+                const tokenStr = resp.obj.tokenHead + resp.obj.token
+                window.sessionStorage.setItem('tokenStr',tokenStr)
+                this.$router.push('/home')
+              }
             })
           } else {
             this.$message.error('错了哦，这是一条错误消息');
