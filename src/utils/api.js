@@ -4,7 +4,7 @@ import { Message } from "element-ui"
 axios.interceptors.request.use(config =>{
   if (window.sessionStorage.getItem('tokenStr')) {
     console.log(config)
-    config.headers['Authorization'] = window.sessionStoreage.getItem('tokenStr')
+    config.headers['Authorization'] = window.sessionStorage.getItem('tokenStr')
   }
   return config
 } , error =>{
