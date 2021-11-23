@@ -4,13 +4,13 @@
       <el-header>Header</el-header>
       <el-container>
         <el-aside width="200px">
-          <el-menu router>
-            <el-submenu index="1" v-for="(item,index) in routes" :ket="index" v-if="!item.hidden">
+          <el-menu router unique-opened>
+            <el-submenu :index="index+''" v-for="(item,index) in routes" :key="index"  v-if="!item.hidden">
               <template slot="title">
-                <i class="el-icon-location"></i>
+                <i :class="item.iconCls" style="color: #1accff;margin-right: 5px"></i>
                 <span>{{item.name}}</span>
               </template>
-                <el-menu-item :index="children.path" v-for="(children,index) in item.children">{{children.name}}</el-menu-item>
+                <el-menu-item :index="children.path" v-for="(children,index) in item.children" :key="index">{{children.name}}</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-aside>

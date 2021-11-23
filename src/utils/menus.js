@@ -6,15 +6,14 @@ export const initMenu = (router, store) => {
   }
   getRequest('/system/config/menu').then(data => {
     if (data) {
-      console.log(data)
-      let fmtRoutes = formatRoutes(data)
+      let fmtRoutes = formatRoutes(data);
       router.addRoutes(fmtRoutes);
-      this.$store.commit('initRoutes', fmtRoutes);
+      store.commit('initRoutes', fmtRoutes);
     }
   })
 }
 
-export const formatRoutes = routes => {
+export const formatRoutes = (routes) => {
   let fmtRoutes = [];
   routes.forEach(router => {
     let {
@@ -32,9 +31,11 @@ export const formatRoutes = routes => {
       name: name,
       iconCls: iconCls,
       children: children,
-      component(resolve){
-        if (component.startsWith('Emp')) {
-        require(['../views/emp/' + component + '.vue'],resolve)
+      component(resolve) {
+        if (component.startsWith('Home')) {
+          require(['../views/' + component + '.vue'],resolve)
+        } else if (component.startsWith('Emp')) {
+          require(['../views/emp/' + component + '.vue'],resolve)
         } else if (component.startsWith('Per')) {
           require(['../views/per/' + component + '.vue'],resolve)
         } else if (component.startsWith('Sal')) {

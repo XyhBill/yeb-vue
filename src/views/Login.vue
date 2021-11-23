@@ -46,8 +46,10 @@
         // window.sessionStorage.setItem('tokenStr',tokenStr)
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
+            this.loading = true
             this.postRequest('/login',this.loginForm).then(resp => {
               if (resp) {
+                this.loading = false
                 const tokenStr = resp.obj.tokenHead + resp.obj.token
                 window.sessionStorage.setItem('tokenStr',tokenStr)
                 this.$router.push('/home')
