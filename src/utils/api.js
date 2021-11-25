@@ -13,8 +13,10 @@ axios.interceptors.request.use(config =>{
 axios.interceptors.response.use(success => {
   // if (success.status && success.status == 200) {
     // if (success.status == 403 || success.status == 401 || success.status == 500) {
-      Message.success({message: success.data.Message})
-      return success.data;
+  if (success.data.message) {
+    Message.success({ message: success.data.message })
+  }
+    return success.data;
     // } 
   // }
 }, error => {

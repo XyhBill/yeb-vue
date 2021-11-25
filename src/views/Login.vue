@@ -52,7 +52,8 @@
                 this.loading = false
                 const tokenStr = resp.obj.tokenHead + resp.obj.token
                 window.sessionStorage.setItem('tokenStr',tokenStr)
-                this.$router.push('/home')
+                let path = this.$route.query.redirect
+                this.$router.push((path == '/' || path == undefined) ? '/home' : path)
               }
             })
           } else {

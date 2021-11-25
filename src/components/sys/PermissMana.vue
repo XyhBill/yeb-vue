@@ -1,15 +1,15 @@
 <template>
   <div>
-    Test1
+    权限管理
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Test1'
+    name: 'PermissMana'
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>

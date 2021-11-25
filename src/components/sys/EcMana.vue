@@ -1,12 +1,12 @@
 <template>
   <div>
-    Test2
+    奖惩
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Test2'
+    name: 'EcMana'
   }
 </script>
 
