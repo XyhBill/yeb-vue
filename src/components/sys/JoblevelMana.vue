@@ -10,7 +10,8 @@
     <el-button type="primary" icon="el-icon-plus" size="small" @click="addJobLevel">添加</el-button>
     </div>
     <div>
-      <el-table :data="jls" border stripe style="width: 70%">
+      <el-table :data="jls" border stripe style="width: 54%" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="id"  label="编号"  width="50"></el-table-column>
         <el-table-column prop="name"  label="职称名称"  width="150"></el-table-column>
         <el-table-column prop="tittleLevel"  label="职称等级"  width="150"></el-table-column>
@@ -21,21 +22,41 @@
             <el-tag v-else type="danger">未启用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="170">
           <template slot-scope="scope">
             <el-button size="mini" @click="showEditView(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-button size="small" :disabled="this.multipleSelection.length==0" type="danger" @click="deleteMany">批量删除</el-button>
     </div>
     <el-dialog title="编辑职称" :visible.sync="dialogVisible" width="30%">
-      <el-tag>职称名称</el-tag>
-      <el-input v-model="updateJl.name" ></el-input>
-      <el-tag>职称等级</el-tag>
-      <el-input v-model="updateJl.tittleLevel" ></el-input>
-      <el-tag>是否启用</el-tag>
-      <el-input v-model="updateJl.enabled" ></el-input>
+      <table>
+        <tr>
+          <td><el-tag>职称名称</el-tag></td>
+          <td>
+            <el-input v-model="updateJl.name" size="small"></el-input>
+          </td>
+        </tr>
+        <tr>
+          <td><el-tag>职称等级</el-tag></td>
+          <td>
+            <el-select size="small" v-model="updateJl.tittleLevel" placeholder="请选择">
+              <el-option
+                v-for="item in tittleLevels" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
+          </td>
+        </tr>
+        <tr>
+          <td><el-tag>是否启用</el-tag></td>
+          <td>
+            <el-switch style="display: block" v-model="updateJl.enabled" active-color="#13ce66" inactive-color="#ff4949" active-text="已启用" inactive-text="未启用">
+            </el-switch>
+          </td>
+        </tr>
+      </table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="doUpdate">确 定</el-button>
@@ -66,17 +87,53 @@
           tittleLevel: '',
           enabled: false
         },
-        dialogVisible: false
+        dialogVisible: false,
+        multipleSelection: []
       }
     },
     mounted () {
       this.initJls()
     },
     methods: {
+      deleteMany(){
+        this.$confirm('此操作将永久删除[' + this.multipleSelection.length + ']条职称, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            let ids = []
+            this.multipleSelection.forEach(item=>{
+              ids.push(item.id)
+            })
+            console.log(ids)
+            this.deleteRequest('/system/basic/joblevel' , ids).then(resp=> {
+              console.log("🚀 ~ file: PosMana.vue ~ line 65 ~ this.deleteRequest ~ resp", resp)
+              if (resp) {
+                this.initJls()
+              }
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
+      handleSelectionChange(val){
+        this.multipleSelection = val
+      },
       doUpdate(){
-
+        this.putRequest('/system/basic/joblevel',this.updateJl).then(resp=>{
+          if (resp) {
+            console.log("🚀 ~ file: JoblevelMana.vue ~ line 110 ~ this.putRequest ~ resp", resp)
+            this.dialogVisible = false
+            this.initJls()
+          }
+        })
       },
       showEditView(data){
+        Object.assign(this.updateJl,data)
+        this.updateJl.createDate = ''
         this.dialogVisible = true
       },
       handleDelete(data){

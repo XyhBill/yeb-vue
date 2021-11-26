@@ -37,7 +37,7 @@ import PosMana from '../../components/sys/PosMana.vue'
     name: "SysBasic",
     data() {
       return {
-        activeName: 'JoblevelMana'
+        activeName: 'PermissMana'
       }
     },
   }
